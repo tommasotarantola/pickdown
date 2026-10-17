@@ -21,7 +21,7 @@
     "default_popup": "popup.html",
     "default_title": "Pickdown",
     "default_icon": {
-      "128": "icons/icon128.png"
+      "128": "icons/icon128-off.png"
     }
   },
   "commands": {

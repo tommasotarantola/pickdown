@@ -1,2 +1,2 @@
-# Build output and store assets: made from the sources, not sources themselves.
 release/
+test/

@@ -22,7 +22,7 @@ Built to manually feed pages to an AI chat when the site blocks bots. Works for 
 | Alt+Shift+D  | Clear the selection                      |
 | Alt+Shift+M  | Switch mode                              |
 
-- The icon badge counts the selected elements: blue while selecting, grey when stopped.
+- The toolbar icon is blue while selecting and grey when not. Its badge counts the selection.
 - In Markdown mode, the copy message tells you if any visible word is missing from the output.
 - The panel has a log of the last 30 events, with a "Copy log" button for bug reports.
 
@@ -44,7 +44,9 @@ Any Chromium browser from version 116. In Brave, avoid Alt+Shift with C P X Z W 
 - No network code, no libraries, no data leaves the browser.
 - The Markdown converter walks every node, including shadow DOM and same-origin iframes.
 - Hidden content (`display:none`, `visibility:hidden`, screen-reader-only boxes) is skipped.
-- `icons/make_icons.py` (Pillow) draws the icon.
+- `icons/make_icons.py` (Pillow) draws the icons.
+- `node test/e2e.mjs` runs the end-to-end test in headless Brave (or `BROWSER=google-chrome`).
+- The test drives the real extension with real mouse and key events, using a throwaway profile.
 
 ## Limits
 

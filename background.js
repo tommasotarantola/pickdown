@@ -10,7 +10,7 @@
  *     1. Constants
  *     2. Helpers        call the picker, write the clipboard, badge, log
  *     3. Actions        cst_fun_do: the one function that runs every action
- *     4. Entry points   keyboard shortcuts, messages from panel and picker
+ *     4. Entry points   keyboard shortcuts, page loads, messages from panel and picker
  *
  *   - Opening the panel or pressing a shortcut grants "activeTab" for the current tab only.
  *     With it we inject picker.js (it loads once per page) and call its methods through
@@ -67,8 +67,12 @@ async function cst_fun_clipboard(text) {
   if (!res || !res.ok) throw new Error('the browser refused the clipboard write');
 }
 
-// Badge: number of selected elements. Blue while selecting, grey when stopped.
+// Toolbar icon and badge for one tab. Selecting: blue icon, blue badge. Not selecting: grey
+// icon (also the default in manifest.json), grey badge. Badge text: number of selected
+// elements. Chrome resets per-tab settings only when the tab is closed, so after a page load
+// the "tabs.onUpdated" listener below asks the page what is really there.
 function cst_fun_badge(tabId, count, active) {
+  chrome.action.setIcon({ tabId, path: active ? 'icons/icon128.png' : 'icons/icon128-off.png' });
   chrome.action.setBadgeText({ tabId, text: active || count ? String(count) : '' });
   chrome.action.setBadgeBackgroundColor({ tabId, color: active ? '#1a73e8' : '#5f6368' });
   chrome.action.setTitle({ tabId, title: TITLE });
@@ -166,6 +170,16 @@ async function cst_fun_do(tabId, cmd, arg) {
 // ================================================================ 4. Entry points
 chrome.commands.onCommand.addListener((command, tab) => {
   if (COMMANDS[command]) cst_fun_do(tab.id, COMMANDS[command]).catch(() => { /* in badge and log */ });
+});
+
+// After a page load (reload, link, or a site changing page without reloading) the icon must
+// show the truth: a new document has no picker; a same-document change keeps it. Reading
+// the page fails when we no longer have access to it, which also means no picker of ours.
+chrome.tabs.onUpdated.addListener((tabId, info) => {
+  if (info.status !== 'complete') return;
+  cst_fun_call(tabId, 'state')
+    .then((s) => cst_fun_badge(tabId, s ? s.count : 0, s ? s.active : false))
+    .catch(() => cst_fun_badge(tabId, 0, false));
 });
 
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {

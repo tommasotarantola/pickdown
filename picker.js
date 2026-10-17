@@ -272,7 +272,9 @@
     const md = pieces.map((el) => cst_fun_clean(cst_fun_md(el))).join('\n\n---\n\n');
     // Self-check: words the browser renders (innerText) that are not in the Markdown.
     const norm = (w) => w.replace(/[^\p{L}\p{N}]/gu, '').toLowerCase();
-    const have = new Set(md.split(/\s+/).map(norm));
+    // Link and image targets "](url)" are removed first: glued to the text ("[link](url).")
+    // they would turn "link" into one long token and report it as missing.
+    const have = new Set(md.replace(/\]\([^)]*\)/g, '] ').split(/\s+/).map(norm));
     const missing = new Set();
     for (const el of pieces) {
       for (const w of (el.innerText || '').split(/\s+/)) {
