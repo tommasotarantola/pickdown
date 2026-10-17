@@ -1,0 +1,57 @@
+<!doctype html>
+<!-- Panel opened by the toolbar icon. Logic in popup.js. -->
+<meta charset="utf-8">
+<style>
+  :root { color-scheme: light dark; --fg: #202124; --bg: #fff; --mute: #5f6368; --acc: #1a73e8; --line: #dadce0; }
+  @media (prefers-color-scheme: dark) { :root { --fg: #e8eaed; --bg: #202124; --mute: #9aa0a6; --acc: #8ab4f8; --line: #3c4043; } }
+  body { margin: 0; width: 260px; font: 13px/1.4 system-ui, sans-serif; color: var(--fg); background: var(--bg); }
+  .row { display: flex; align-items: center; gap: 8px; padding: 6px 10px; }
+  .grow { flex: 1; }
+  kbd { font: 11px monospace; color: var(--mute); }
+  button { font: inherit; color: var(--fg); background: transparent; border: 1px solid var(--line);
+           border-radius: 4px; cursor: pointer; padding: 4px 8px; }
+  .wide { width: 100%; text-align: left; }
+  button:hover:not(:disabled) { border-color: var(--acc); }
+  button:disabled, input:disabled + span { opacity: .4; cursor: default; }
+  .seg { display: flex; padding: 0 10px 6px; }
+  .seg button { flex: 1; border-radius: 0; margin-left: -1px; }
+  .seg button:first-child { border-radius: 4px 0 0 4px; margin-left: 0; }
+  .seg button:last-child { border-radius: 0 4px 4px 0; }
+  .seg button.on { background: var(--acc); border-color: var(--acc); color: var(--bg); font-weight: bold; }
+  #count { font-weight: bold; }
+  #msg { padding: 4px 10px 8px; color: var(--mute); font-size: 12px; word-break: break-word; }
+  #msg:empty { display: none; }
+  .foot { border-top: 1px solid var(--line); padding: 4px 10px; font-size: 11px; }
+  details { border-top: 1px solid var(--line); padding: 4px 10px; font-size: 11px; }
+  summary { cursor: pointer; color: var(--mute); }
+  button.small { float: right; padding: 0 6px; font-size: 11px; }
+  #log { max-height: 180px; overflow-y: auto; margin-top: 4px; font: 11px/1.4 monospace; }
+  #log div { padding: 2px 0; border-bottom: 1px solid var(--line); word-break: break-word; }
+  #log .err { color: #d93025; }
+  #log .when { color: var(--mute); }
+  a { color: var(--acc); cursor: pointer; }
+</style>
+<div class="row"><span class="grow">Mode</span><kbd id="k-cycle-mode"></kbd></div>
+<div class="seg">
+  <button data-mode="text">Text</button><button data-mode="markdown">Markdown</button><button data-mode="dom">Full DOM</button>
+</div>
+<div class="row">
+  <label class="grow"><input type="checkbox" id="toggle"> <span>Selecting</span></label>
+  <kbd id="k-toggle-picking"></kbd>
+</div>
+<div class="row"><span class="grow"><span id="count">0</span> selected</span></div>
+<div class="row">
+  <span class="grow"><button class="wide" id="export">Copy</button></span>
+  <kbd id="k-export-markdown"></kbd>
+</div>
+<div class="row">
+  <span class="grow"><button class="wide" id="clear">Clear selection</button></span>
+  <kbd id="k-clear-selection"></kbd>
+</div>
+<div id="msg"></div>
+<details>
+  <summary>Log (<span id="log-n">0</span>) <button id="copy-log" class="small">Copy log</button></summary>
+  <div id="log"></div>
+</details>
+<div class="foot"><a id="shortcuts">change shortcuts</a></div>
+<script src="popup.js"></script>

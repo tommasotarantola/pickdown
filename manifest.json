@@ -1,0 +1,53 @@
+{
+  "manifest_version": 3,
+  "name": "Pickdown",
+  "version": "1.0.0",
+  "description": "Select several elements on a page and copy them as text, Markdown or HTML, or copy one as a PNG image.",
+  "minimum_chrome_version": "116",
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "offscreen",
+    "clipboardWrite",
+    "storage"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "icons": {
+    "128": "icons/icon128.png"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Pickdown",
+    "default_icon": {
+      "128": "icons/icon128.png"
+    }
+  },
+  "commands": {
+    "toggle-picking": {
+      "suggested_key": {
+        "default": "Alt+Shift+S"
+      },
+      "description": "Start / stop selecting"
+    },
+    "export-markdown": {
+      "suggested_key": {
+        "default": "Alt+Shift+E"
+      },
+      "description": "Copy selection in the current mode"
+    },
+    "clear-selection": {
+      "suggested_key": {
+        "default": "Alt+Shift+D"
+      },
+      "description": "Clear selection"
+    },
+    "cycle-mode": {
+      "suggested_key": {
+        "default": "Alt+Shift+M"
+      },
+      "description": "Switch mode: Text / Markdown / Full DOM"
+    }
+  }
+}
