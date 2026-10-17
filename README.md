@@ -4,7 +4,7 @@ Point at parts of a web page, select as many as you want, copy them all in one g
 Output as plain text, Markdown (links, headings, lists, tables) or raw HTML.
 Charts, maps and canvases can be copied as a PNG image.
 
-Built to feed pages to an AI chat when the site blocks bots. Works for anything else too.
+Built to manually feed pages to an AI chat when the site blocks bots. Works for anything else too.
 
 ## Usage
 
